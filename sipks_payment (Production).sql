@@ -1,3 +1,5 @@
+DROP PACKAGE FCUBEUSER.SIPKS_PAYMENT;
+
 CREATE OR REPLACE PACKAGE FCUBEUSER.sipks_payment
 AS
 /*----------------------------------------------------------------------------------------------------
@@ -191,7 +193,7 @@ l_limit_check        VARCHAR2(5) := 'FALSE';
 
 BEGIN
 
-        debug.pr_debug ('SI','In fn_execute_payments for branch '||global.current_branch);
+					debug.pr_debug ('SI','In fn_execute_payments for branch '||global.current_branch);
         --JORUBJFCC0573 retro of DEFLT00014141 changes TO REINAITAILAIZE THE PACKAGE VARIBALES
             pkg_branch  := global.current_branch;
             pkg_appdate := global.application_date;
@@ -199,14 +201,15 @@ BEGIN
             pkg_user    := global.user_id;
         debug.pr_debug ('SI','||pkg_branch'||pkg_branch);
          --JORUBJFCC0573 retro of DEFLT00014141 changes TO REINAITAILAIZE THE PACKAGE VARIBALES
-        BEGIN
+            BEGIN
 
-            IF p_process = 'E'
+               IF p_process = 'E'
             THEN
             debug.pr_debug ('SI','Processing Time is EOD');
 
                 SELECT eod_commit_count
                 INTO     l_commit_freq
+				
                 FROM     cstbs_commitfreq
                 WHERE     module_id = 'SI'
                 AND         function_id = 'SIPAYMNT';
@@ -238,7 +241,8 @@ BEGIN
             BEGIN
                 --Fcc5.3 Changes starts
                 debug.pr_debug ('SI','start inside loop');
-                If p_cycle.action_code_amt = 'W' and p_process = 'B'
+                If p_cycle.action_code_amt = 'W' 
+				   and p_process = 'B'
                 Then
 
                     select     nvl(referral_required, 'N')
